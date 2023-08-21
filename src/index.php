@@ -5,12 +5,13 @@
     $db_name = "StudentDB";
 
     // Create connection
-    $conn = mysqli_connect($host,$username, $password,$db_name);
-    //$con = new mysqli('mysql_db','root','root','studentdb');
-    if(!$conn){
+    $connect = mysqli_connect($host,$username, $password,$db_name);
+    
+    //chechking correctly connected or not
+    if(!$connect){
         die("Connection failed: ".mysqli_connect_error());
     }
-    else{
-        echo "Connected Succesfully to the database";
-    }
+    // else{
+    //     echo "Succesfully connected to the DB";
+    // }
 ?>
