@@ -16,10 +16,11 @@
         // Get PUT data and update the student record
         $putData = json_decode(file_get_contents("php://input"), true);
         
-        if (isset($_GET['StudentID'])) {
+        // / Check if studentID parameter is provided and not empty
+        if (isset($_GET['StudentID']) && !empty($_GET['StudentID'])) {
             $studentID = $_GET['StudentID'];
 
-
+            // Check if JSON data is provided
             if (!empty($putData)) {
                 $result = updateStudentRecord($studentID, $putData);
                 echo $result;
@@ -55,21 +56,36 @@
     // Function to update a student record
     function updateStudentRecord($studentID, $data) {
         global $connect; // Access the global database connection
-
+    
+        // Check if the student ID exists in the database
+        $checkQuery = "SELECT COUNT(*) as count FROM Student WHERE StudentID = '$studentID'";
+        $checkResult = mysqli_query($connect, $checkQuery);
+        $checkRow = mysqli_fetch_assoc($checkResult);
+        
+        if ($checkRow['count'] == 0) {
+            // If the student ID doesn't exist, return an error response
+            $errorData = [
+                'status' => 404, // Not Found
+                'message' => 'Student record not found',
+            ];
+            header("HTTP/1.0 404 Not Found");
+            return json_encode($errorData);
+        }
+    
         // Construct the SET clause for the UPDATE query
         $setClause = '';
         foreach ($data as $field => $value) {
             $sanitizedValue = mysqli_real_escape_string($connect, $value);
             $setClause .= "$field = '$sanitizedValue', ";
         }
-        $setClause = rtrim($setClause, ', ');
-
+        $setClause = rtrim($setClause, ', ');   // to remove the trailing comma from the SET clause
+    
         // SQL query to update the student record
         $query = "UPDATE Student SET $setClause WHERE StudentID = '$studentID'";
-
+    
         // Execute the query
         $query_run = mysqli_query($connect, $query);
-
+    
         if ($query_run) {
             // If the record was successfully updated
             $responseData = [
@@ -88,4 +104,5 @@
             return json_encode($errorData);
         }
     }
+    
 ?>
