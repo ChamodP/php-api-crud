@@ -71,6 +71,35 @@
             header("HTTP/1.0 404 Not Found");
             return json_encode($errorData);
         }
+
+        // Validate email if it is provided in JSON data
+        if (isset($data['email'])) {
+            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                // Invalid email format, return error response
+                $errorData = [
+                    'status' => 400,
+                    // Bad Request
+                    'message' => 'Invalid email format',
+                ];
+                header("HTTP/1.0 400 Bad Request");
+                return json_encode($errorData);
+            }
+        }
+
+        // // Validate date of birth if it is provided in JSON data
+        // if (isset($data['dateOfBirth'])) {
+        //     $format = 'Y-m-d';
+        //     $dateTime = DateTime::createFromFormat($format, $data['dateOfBirth']);
+        //     if (!$dateTime || $dateTime->format($format) !== $data['dateOfBirth']) {
+        //         // Invalid date of birth format, return error response
+        //         $errorData = [
+        //             'status' => 400, // Bad Request
+        //             'message' => 'Invalid date of birth format',
+        //         ];
+        //         header("HTTP/1.0 400 Bad Request");
+        //         return json_encode($errorData);
+        //     }
+        // }
     
         // Construct the SET clause for the UPDATE query
         $setClause = '';
