@@ -72,6 +72,36 @@ function createStudentRecord($data)
     $sanitizedAddress = mysqli_real_escape_string($connect, $address);
     $sanitizedEmail = mysqli_real_escape_string($connect, $email);
 
+    // Valid email
+    if (!filter_var($sanitizedEmail, FILTER_VALIDATE_EMAIL)) {
+        // Invalid email format, return error response
+        $errorData = [
+            'status' => 400,
+            // Bad Request
+            'message' => 'Invalid email format',
+        ];
+        header("HTTP/1.0 400 Bad Request");
+        echo json_encode($errorData);
+        exit;
+    }
+
+    // Validate date of birth
+    $format = 'Y-m-d';
+    $dateTime = DateTime::createFromFormat($format, $sanitizedDateOfBirth);
+    if (!$dateTime || $dateTime->format($format) !== $sanitizedDateOfBirth) {
+        // Invalid date of birth format, return error response
+        $errorData = [
+            'status' => 400,
+            // Bad Request
+            'message' => 'Invalid date of birth format',
+        ];
+        header("HTTP/1.0 400 Bad Request");
+        echo json_encode($errorData);
+        exit;
+    }
+
+
+
     // SQL query to insert a new student record
     $query = "INSERT INTO Student (FirstName, LastName, DateofBirth, Address, Email) VALUES ('$sanitizedFirstName', '$sanitizedLastName', '$sanitizedDateOfBirth', '$sanitizedAddress', '$sanitizedEmail')";
 
