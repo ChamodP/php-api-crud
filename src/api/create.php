@@ -36,7 +36,7 @@ function createStudentRecord($data)
     global $connect; // Access the global database connection
 
     // Check if required fields are present in the input data
-    if (!isset($data['firstName']) || !isset($data['lastName']) || !isset($data['dateOfBirth']) || !isset($data['address']) || !isset($data['email'])) {
+    if (!isset($data['FirstName']) || !isset($data['LastName']) || !isset($data['DateofBirth']) || !isset($data['Address']) || !isset($data['Email'])) {
         $errorData = [
             'status' => 400,
             // Bad Request
@@ -47,11 +47,11 @@ function createStudentRecord($data)
     }
 
     // Extract data from the POST request
-    $firstName = $data['firstName'];
-    $lastName = $data['lastName'];
-    $dateOfBirth = $data['dateOfBirth'];
-    $address = $data['address'];
-    $email = $data['email'];
+    $firstName = $data['FirstName'];
+    $lastName = $data['LastName'];
+    $dateOfBirth = $data['DateofBirth'];
+    $address = $data['Address'];
+    $email = $data['Email'];
 
     // Check if has empty values in the input data
     if (empty($firstName) || empty($lastName) || empty($dateOfBirth) || empty($address) || empty($email)) {
