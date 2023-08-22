@@ -86,6 +86,19 @@
             }
         }
 
+        // Check if any value in the JSON data is empty
+        foreach ($data as $field => $value) {
+            if (empty($value)) {
+                $errorData = [
+                    'status' => 400,
+                    // Bad Request
+                    'message' => "Empty value for field '$field'",
+                ];
+                header("HTTP/1.0 400 Bad Request");
+                return json_encode($errorData);
+            }
+        }
+
         // // Validate date of birth if it is provided in JSON data
         // if (isset($data['dateOfBirth'])) {
         //     $format = 'Y-m-d';
