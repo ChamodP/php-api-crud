@@ -68,7 +68,7 @@
             } else { // No student record found
                 $data = [
                     'status' => 404, // Not Found
-                    'message' => 'Student record not found',
+                    'message' => 'Student id '.$sanitizedStudentID.' not found',
                 ];
                 header("HTTP/1.0 404 Not Found");
                 return json_encode($data);
